@@ -1,0 +1,15 @@
+#table {
+    max-width: 90%;
+    display: flex;
+    margin: 3rem;
+}
+
+.container-shadow {
+    box-shadow: 8px 16px 32px rgb(0 0 0 / 50%);
+    -moz-box-shadow: 8px 16px 32px rgba(0,0,0,.5);
+    box-shadow: 8px 16px 32px rgb(0 0 0 / 50%);
+}
+
+.table {
+    
+}
