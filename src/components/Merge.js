@@ -1,26 +1,23 @@
 import React from "react";
 import axios from 'axios';
-import { library } from "@fontawesome/fontawesome-free";
-import { Filter } from "./Filter";
-import { Table, Button } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { Table } from "react-bootstrap";
 import '../stylesheets/merge.css';
 import { useState, useEffect } from "react";
-import { NavLink } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import { DetailView } from "./DetailView";
+import { withRouter } from 'react-router-dom';
 
 const getData = async () => {
     const {data} = await axios.get('data.json'); 
     const info = data.map( merge => {
-        /* return {
-            id: merge._id.$oid,
-            user: merge.user.name,
-            project: merge.project.name
-        } */
         return {...merge}
     })
     return info;
 }   
 
-export const Merge = () => {
+export const Merge = ({history}) => {
 
     const [state, setState] = useState({
         data: [],
@@ -28,6 +25,7 @@ export const Merge = () => {
     });
  
     useEffect(() => {
+        console.log('handleRedirect//Merge', history);
         getData().then( data => {
             setState({
                 data: data,
@@ -35,7 +33,7 @@ export const Merge = () => {
             })
         })
     }, []);
-
+    
     return(
         <>
             <div id='table' className='container-shadow'>
@@ -44,7 +42,7 @@ export const Merge = () => {
                             <TableHead />
                         </thead>
                         <tbody>
-                            <TableBody state={state.data}/> 
+                            <TableBody state={state.data} route={history}/> 
                         </tbody>
                 </Table>
             </div>
@@ -70,21 +68,14 @@ const TableHead = () => {
     );
 }
 
-const TableBody = ({state}) => {
-    console.log(state);
+const TableBody = ({state, route}) => {
+
+    const handleRedirect = (merge) => {
+        //history.push(`/detail/${merge.id}`, merge);
+        route.push(`/detail`, merge);
+    }
+
     return state.map( (merge) => (
-        // <tr key={`tr-${merge.id}`}>
-        //     <td>{merge._id}</td>
-        //     <td>{merge.user.name}</td>
-        //     <td>{merge.}</td>
-        //     <td>{merge.project.name}</td>
-        //     <td>{merge.repository.name}</td>
-        //     <td>{merge.attributes.id}</td>
-        //     <td>{merge.__v}</td>
-        //     <td>
-        //         <Button variant={"info"}>Info</Button>{' '}
-        //     </td>
-        // </tr>
         <tr key={`tr-${merge._id.$oid}`}>
             <td>{merge._id.$oid}</td>
             <td>{merge.user.name}</td>
@@ -96,7 +87,9 @@ const TableBody = ({state}) => {
             <td>{merge.attributes.source_branch}</td>
             <td>{merge.attributes.target_branch}</td>
             <td>{merge.__v}</td>
-            <td><NavLink to="">Ojito</NavLink></td>
+            <td><Button onClick={() => handleRedirect(merge)} variant="primary" /* style='border-radius: 100%' */><FontAwesomeIcon icon={faEye}/></Button>{' '}</td>
+            <td><FontAwesomeIcon icon={faEye}/></td>
         </tr>
     ));
-}
+} 
+export default withRouter(TableBody);

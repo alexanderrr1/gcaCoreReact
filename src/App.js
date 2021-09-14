@@ -1,14 +1,19 @@
 import './App.css';
-import { library } from "@fontawesome/fontawesome-free";
-import { NavBar } from './components/NavBar';
 import { Merge } from './components/Merge.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './components/Merge.js'
+import './components/Merge.js';
+import { DetailView } from './components/DetailView';
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 function App() {
   return (
     <>
-      <Merge/>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path={"/"} component={Merge}/>
+          <Route exact path={"/detail"} component={DetailView}/>
+        </Switch>
+      </BrowserRouter>
     </>
   );
 }
